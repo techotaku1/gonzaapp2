@@ -1,0 +1,978 @@
+@import 'tailwindcss';
+
+@theme inline {
+  --font-display: var(--font-delius);
+  --font-table-text: var(--font-lexend);
+}
+
+/* Base styles */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-600, currentColor);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-600);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button:not([class*='table']) {
+    font-family: var(--font-display);
+  }
+}
+
+/* Custom utilities - Converting from @layer utilities to @utility */
+@utility table-text-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-table-text);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 0.65rem;
+  line-height: 1;
+  height: 1.5rem;
+  color: black;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0.15rem 0.5rem !important; /* Added padding */
+}
+
+@utility table-numeric-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-table-text);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-align: center;
+  color: black;
+  line-height: 1;
+  height: 1.5rem;
+  padding: 0.15rem 0.5rem !important;
+  margin: 0 auto;
+  border: 1px solid var(--color-gray-600);
+  border-radius: 0.25rem;
+  appearance: textfield;
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+@utility placa-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-table-text);
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1;
+  height: 2rem;
+  padding: 0.15rem 0.5rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: black;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.table-numeric-field::-webkit-inner-spin-button,
+.table-numeric-field::-webkit-outer-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@utility table-select-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-table-text);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 0.65rem;
+  line-height: 1;
+  height: 1.5rem;
+  padding: 0.15rem 0.5rem !important;
+  color: black;
+  margin: 0 auto;
+}
+
+@utility table-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--color-gray-600) !important;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.5rem !important;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+@utility table-header {
+  position: sticky;
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0.15rem 0.5rem !important;
+  font-family: var(--font-table-text);
+  font-weight: 700;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  min-width: min-content;
+  top: 0;
+  z-index: 10;
+  background-color: #f9fafb;
+  border-right: 1px solid var(--color-gray-600) !important;
+  border-bottom: 1px solid var(--color-gray-600) !important;
+  /* Agregar estas propiedades */
+  position: -webkit-sticky;
+  position: sticky;
+  white-space: nowrap;
+}
+
+/* Header de Fecha: eliminar padding lateral para centrar icono en modo colapsado */
+.fecha-header {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Borde vertical de refuerzo para columnas sticky a la izquierda */
+.sticky-right-divider {
+  position: relative;
+}
+.sticky-right-divider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1px; /* asegura que el borde quede por encima del siguiente th */
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-gray-600);
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* Contenedor de tabla con scroll */
+@utility table-container {
+  position: relative;
+  overflow: visible; /* Quitar scroll interno */
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  height: auto; /* Ocupa toda la altura disponible */
+  min-height: 100vh;
+}
+
+@utility table-scroll-container {
+  overflow: visible; /* Quitar scroll vertical interno */
+  height: auto;
+  width: 100%;
+  position: relative;
+}
+
+@utility table-wrapper {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: visible;
+}
+
+/* Convert date picker styles */
+@utility table-date-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  font-family: var(--font-table-text);
+  font-size: 0.65rem;
+  line-height: 1;
+  color: black;
+  height: 1.5rem;
+  padding: 0.15rem 0.75rem !important; /* Updated padding with more space on left/right */
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.table-date-field::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  background: transparent;
+  color: transparent;
+}
+
+.table-date-field::-webkit-datetime-edit {
+  padding: 0;
+  margin: 0;
+}
+
+.table-date-field::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+/* Estilo base para todos los selects de la tabla */
+@utility table-select-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-table-text);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 0.65rem;
+  line-height: 1;
+  height: 1.5rem;
+  padding: 0.15rem 1.5rem 0.15rem 0.5rem !important;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  text-align-last: center;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.25rem center;
+  background-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Estilo para las opciones del select */
+select.table-select-base option {
+  padding: 0.15rem 0.5rem !important;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Asegurarnos que las opciones estén centradas en Firefox */
+@-moz-document url-prefix() {
+  select.table-select-base {
+    padding-right: 1.5rem !important;
+    background-position: right 0.25rem center;
+  }
+  select.table-select-base option {
+    text-align: left;
+  }
+}
+
+/* Asegurarnos que las opciones estén centradas en Chrome/Safari */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select.table-select-base {
+    padding-right: 1.5rem !important;
+    background-position: right 0.25rem center;
+  }
+  select.table-select-base option {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    text-align: left !important;
+  }
+}
+
+/* Actualización de colores con intensidad media para emitidoPor */
+/* 
+@utility emitido-por-panel {
+  background-color: color-mix(
+    in oklch,
+    var(--color-blue-300) 100%,
+    transparent
+  );
+  color: var(--color-blue-800);
+}
+
+@utility emitido-por-panel-juan {
+  background-color: color-mix(
+    in oklch,
+    var(--color-green-300) 100%,
+    transparent
+  );
+  color: var(--color-green-800);
+}
+
+@utility emitido-por-panel-evelio {
+  background-color: color-mix(
+    in oklch,
+    var(--color-blue-400) 100%,
+    transparent
+  );
+  color: var(--color-blue-800);
+}
+
+@utility emitido-por-panel-william {
+  background-color: color-mix(in oklch, var(--color-sky-300) 100%, transparent);
+  color: var(--color-sky-800);
+}
+
+@utility emitido-por-panel-gloria {
+  background-color: color-mix(
+    in oklch,
+    var(--color-purple-300) 100%,
+    transparent
+  );
+  color: var(--color-purple-800);
+}
+
+@utility emitido-por-panel-sebas {
+  background-color: color-mix(
+    in oklch,
+    var(--color-yellow-300) 100%,
+    transparent
+  );
+  color: var(--color-yellow-800);
+}
+
+@utility emitido-por-panel-yuli {
+  background-color: color-mix(
+    in oklch,
+    var(--color-pink-300) 100%,
+    transparent
+  );
+  color: var(--color-pink-800);
+}
+
+@utility emitido-por-previ-usuario {
+  background-color: color-mix(
+    in oklch,
+    var(--color-fuchsia-300) 100%,
+    transparent
+  );
+  color: var(--color-fuchsia-800);
+}
+
+@utility emitido-por-previ-publica {
+  background-color: color-mix(
+    in oklch,
+    var(--color-rose-300) 100%,
+    transparent
+  );
+  color: var(--color-rose-800);
+}
+
+@utility emitido-por-previ-sonia {
+  background-color: color-mix(
+    in oklch,
+    var(--color-amber-300) 100%,
+    transparent
+  );
+  color: var(--color-amber-800);
+}
+
+@utility emitido-por-bolivar {
+  background-color: color-mix(
+    in oklch,
+    var(--color-lime-300) 100%,
+    transparent
+  );
+  color: var(--color-lime-800);
+}
+
+@utility emitido-por-axa-sebas {
+  background-color: color-mix(
+    in oklch,
+    var(--color-cyan-300) 100%,
+    transparent
+  );
+  color: var(--color-cyan-800);
+}
+
+@utility emitido-por-axa-yuli {
+  background-color: color-mix(
+    in oklch,
+    var(--color-orange-300) 100%,
+    transparent
+  );
+  color: var(--color-orange-800);
+}
+
+@utility emitido-por-axa-gloria {
+  background-color: color-mix(
+    in oklch,
+    var(--color-indigo-300) 100%,
+    transparent
+  );
+  color: var(--color-indigo-800);
+}
+
+@utility emitido-por-axa-maryuri {
+  background-color: color-mix(in oklch, var(--color-red-200) 100%, transparent);
+  color: var(--color-red-800);
+}
+
+@utility emitido-por-mundial-nave {
+  background-color: color-mix(
+    in oklch,
+    var(--color-teal-300) 100%,
+    transparent
+  );
+  color: var(--color-teal-800);
+}
+
+@utility emitido-por-mundial-fel {
+  background-color: color-mix(
+    in oklch,
+    var(--color-violet-300) 100%,
+    transparent
+  );
+  color: var(--color-violet-800);
+}
+
+@utility emitido-por-hh {
+  background-color: color-mix(
+    in oklch,
+    var(--color-cyan-200) 100%,
+    transparent
+  );
+  color: var(--color-cyan-900);
+}
+
+@utility emitido-por-no-emitir {
+  background-color: color-mix(
+    in oklch,
+    var(--color-gray-300) 100%,
+    transparent
+  );
+  color: var(--color-gray-800);
+}
+*/
+
+@layer components {
+  /* Updated table header styles */
+  .table-header {
+    @apply sticky top-0 z-10;
+    position: -webkit-sticky;
+    background-color: #f9fafb;
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0.15rem 0.5rem !important;
+    font-family: var(--font-table-text);
+    font-weight: 700;
+    color: black;
+    text-align: center;
+    vertical-align: middle;
+    border-right: 1px solid var(--color-gray-600) !important;
+    border-bottom: 1px solid var(--color-gray-600) !important;
+    min-width: min-content;
+    box-sizing: border-box;
+  }
+
+  /* Updated table container styles */
+  .table-container {
+    @apply relative rounded-lg shadow-md;
+    height: auto; /* Ocupa toda la altura disponible */
+    min-height: 100vh;
+    overflow: visible; /* Quitar scroll interno */
+  }
+
+  .table-scroll-container {
+    @apply relative h-full w-full;
+    overflow: visible; /* Quitar scroll vertical interno */
+    will-change: transform;
+  }
+
+  .table-wrapper {
+    @apply w-full;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  /* Updated checkbox cell styles */
+  .table-checkbox-cell {
+    @apply relative table-cell text-center align-middle;
+    position: relative;
+    width: 2.5rem;
+    height: 100%;
+    padding: 0 !important;
+    border-right: 1px solid var(--color-gray-600);
+    border-bottom: 1px solid var(--color-gray-600);
+  }
+
+  .table-checkbox-wrapper {
+    @apply flex h-full w-full items-center justify-center;
+    min-height: 1.5rem;
+  }
+
+  /* Updated table header styles for checkbox columns */
+  .table-header:has(+ .table-checkbox-cell),
+  .table-header:has(+ td:has(.check-label)) {
+    border-right: 1px solid var(--color-gray-600) !important;
+  }
+
+  /* Custom scrollbar styles */
+  .table-scroll-container::-webkit-scrollbar {
+    @apply h-2.5 w-2.5;
+  }
+
+  .table-scroll-container::-webkit-scrollbar-track {
+    @apply rounded bg-gray-100;
+  }
+
+  .table-scroll-container::-webkit-scrollbar-thumb {
+    @apply rounded bg-gray-400 hover:bg-gray-500;
+  }
+
+  /* Estilos para el contenedor de tabla con scroll mejorado */
+  .enhanced-table-container {
+    position: relative;
+    overflow: visible; /* Quitar scroll interno */
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    height: auto; /* Ocupa toda la altura disponible */
+    min-height: 100vh;
+    padding-bottom: 12px;
+  }
+
+  .enhanced-table-scroll {
+    overflow-x: auto; /* Cambia de visible a auto para permitir scroll horizontal */
+    overflow-y: visible;
+    height: auto;
+    width: 100%;
+    position: relative;
+    scrollbar-width: thin;
+  }
+
+  /* Elimina o comenta estas reglas para no ocultar la barra de scroll horizontal */
+  /*
+  .enhanced-table-scroll::-webkit-scrollbar-track:horizontal {
+    visibility: hidden;
+  }
+  .enhanced-table-scroll::-webkit-scrollbar:horizontal {
+    height: 0;
+    visibility: hidden;
+  }
+  .enhanced-table-scroll::-webkit-scrollbar-thumb:horizontal {
+    visibility: hidden;
+  }
+  */
+}
+
+.check-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  min-height: 1.5rem;
+  padding: 0.15rem !important;
+}
+
+.check-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 1.2em;
+  width: 1.2em;
+  background-color: #ccc;
+  border-radius: 0.2pc;
+  box-shadow: 2px 2px grey;
+}
+
+.check-label input:checked ~ .checkmark {
+  background-color: #5ee429;
+}
+
+.check-label input:disabled ~ .checkmark {
+  background-color: #ccc;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.check-label input:disabled ~ .checkmark:after {
+  display: none;
+}
+
+/* Cursor de prohibido SOLO para checkbox de pagado que no se puede activar manualmente */
+/* Usamos un atributo data para identificar específicamente el checkbox de pagado */
+.check-label[data-field='pagado']:has(
+    input[type='checkbox']:not(:checked):not(:disabled)
+  )
+  .checkmark:hover {
+  cursor: not-allowed;
+}
+
+.check-label[data-field='pagado']:has(
+    input[type='checkbox']:not(:checked):not(:disabled)
+  ):hover {
+  cursor: not-allowed;
+}
+
+.check-label input:checked:disabled ~ .checkmark {
+  background-color: #5ee429;
+  opacity: 3px;
+  cursor: not-allowed;
+}
+
+.check-label input:checked:disabled ~ .checkmark:after {
+  display: block;
+  opacity: 1; /* Cambiado de 0.7 a 1 para que el chulito se vea claro */
+  border-color: white;
+  /* Hacer el chulito más grueso y visible */
+  border-width: 0 0.18em 0.18em 0;
+}
+
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.check-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.check-label .checkmark:after {
+  left: 0.48em;
+  top: 0.25em;
+  width: 0.32em;
+  height: 0.6em;
+  border: solid white;
+  border-width: 0 0.18em 0.18em 0;
+  transform: rotate(45deg);
+}
+
+/* Estilos específicos para la tabla de cuadre */
+.cuadre-table {
+  @apply w-full table-fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.cuadre-header {
+  position: sticky;
+  height: 4rem;
+  line-height: 1.2;
+  padding: 0.08rem; /* Much smaller padding for more horizontal space */
+  font-family: var(--font-table-text);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  background: linear-gradient(to bottom, #f3f4f6 0%, #e5e7eb 100%);
+  border-right: 1px solid var(--color-gray-600) !important;
+  border-bottom: 2px solid #4a5565;
+  z-index: 10;
+  transition: background-color 0.2s;
+  min-width: 320px; /* Much wider columns */
+  max-width: none;
+}
+
+.cuadre-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--color-gray-600) !important;
+  border-bottom: 1px solid var(--color-gray-600) !important;
+  min-height: 2rem;
+  padding: 0.08rem 0.15rem; /* Much smaller padding for more horizontal space */
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: background-color 0.2s;
+}
+
+.cuadre-cell:hover {
+  background-color: rgba(243, 244, 246, 0.5);
+}
+
+.cuadre-select {
+  @apply w-full rounded border border-gray-600;
+  height: 2.2rem;
+  font-size: 0.95rem;
+  background-color: white;
+  transition: all 0.2s;
+  line-height: 1;
+  padding: 0.1rem 1.2rem 0.1rem 0.4rem;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  text-align-last: center;
+  -moz-text-align-last: center;
+  text-indent: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Estilo para las opciones del select */
+select.cuadre-select option {
+  padding: 0.15rem 0.5rem;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.cuadre-input {
+  @apply w-full rounded border border-gray-600;
+  height: 2.2rem;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem; /* Reduced padding to allow more space */
+  background-color: white;
+  transition: all 0.2s;
+  min-width: 0;
+}
+
+/* Quitar flechitas de los inputs type number en todos los navegadores */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Reducir el ancho del input de fecha del cliente en la tabla cuadre */
+input[type='datetime-local'].cuadre-input {
+  min-width: 100px;
+  width: 100px;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Ocultar elementos específicos de Clerk */
+.cl-footerAction,
+.cl-footerActionLink,
+.cl-footerText {
+  display: none !important;
+}
+
+/* Si necesitas ser más específico */
+.cl-card .cl-footer .cl-footerAction {
+  display: none !important;
+}
+
+/* Estilo para inputs autocompletados */
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  @apply bg-transparent;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+  -webkit-text-fill-color: white !important; /* 👈 fuerza el color blanco */
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Traducciones de mensajes de error de Clerk - Actualizado */
+[data-error-code] {
+  @apply mt-1 text-xs font-medium text-red-500;
+}
+
+/* Ocultar mensajes originales en inglés */
+[data-error-code='form_identifier_not_found'],
+[data-error-code='form_password_incorrect'],
+[data-error-code='form_identifier_exists'],
+[data-error-code='form_param_format_invalid'],
+[data-error-code='form_password_pwned'],
+[data-error-code='form_param_missing'],
+[data-error-code='form_code_incorrect'] {
+  font-size: 0;
+  line-height: 0;
+  visibility: hidden;
+  position: relative;
+  height: 16px; /* Mantener espacio para el mensaje traducido */
+  display: block;
+}
+
+/* Traducciones */
+[data-error-code='form_identifier_not_found']::before {
+  content: 'No se encontró una cuenta con este correo electrónico';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+[data-error-code='form_password_incorrect']::before {
+  content: 'La contraseña es incorrecta';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+[data-error-code='form_identifier_exists']::before {
+  content: 'Ya existe una cuenta con este correo electrónico';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+[data-error-code='form_param_format_invalid']::before {
+  content: 'El formato del correo electrónico no es válido';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+[data-error-code='form_password_pwned']::before {
+  content: 'Esta contraseña ha sido comprometida, por favor use otra';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+[data-error-code='form_param_missing']::before {
+  content: 'Este campo es obligatorio';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+[data-error-code='form_code_incorrect']::before {
+  content: 'El código ingresado es incorrecto';
+  visibility: visible;
+  position: absolute;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+/* Agregar estilos para el loading state */
+.loading-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-black/20;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  @apply h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent;
+}
+
+/* Estilos para el filtro de fechas */
+.date-fier-container {
+  @apply relative flex items-center gap-2;
+}
+
+.date-filter-container input[type='date'] {
+  @apply cursor-pointer rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none;
+}
+
+.date-filter-container input[type='date']:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+/* Ocultar visualmente el icono sin eliminar funcionalidad */
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  position: absolute;
+  left: 0;
+}
+
+.date-filter-container input[type='date']:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.table-wrapper thead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #f9fafb;
+}
+
+.table-date-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  width: 150px;
+  font-family: var(--font-table-text);
+  font-size: 0.65rem;
+  line-height: 1;
+  padding-left: 0.5rem;
+}
+
+/* Estilos para el contenedor de tabla con scroll mejorado */
+.enhanced-table-container {
+  position: relative;
+  overflow: visible; /* Quitar scroll interno */
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  height: auto; /* Ocupa toda la altura disponible */
+  min-height: 100vh;
+  padding-bottom: 12px;
+}
+
+.enhanced-table-scroll {
+  overflow-x: auto; /* Cambia de visible a auto para permitir scroll horizontal */
+  overflow-y: visible;
+  height: auto;
+  width: 100%;
+  position: relative;
+  scrollbar-width: thin;
+}
+
+/* Elimina o comenta estas reglas para no ocultar la barra de scroll horizontal */
+/*
+.enhanced-table-scroll::-webkit-scrollbar-track:horizontal {
+  visibility: hidden;
+}
+
+.enhanced-table-scroll::-webkit-scrollbar:horizontal {
+  height: 0;
+  visibility: hidden;
+}
+
+.enhanced-table-scroll::-webkit-scrollbar-thumb:horizontal {
+  visibility: hidden;
+}
+*/
+
+/* Eliminar la barra de scroll vertical interna de la tabla */
+.table-scroll-container::-webkit-scrollbar,
+.enhanced-table-scroll::-webkit-scrollbar {
+  width: 0 !important;
+  background: transparent !important;
+  display: none !important;
+}

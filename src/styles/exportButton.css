@@ -1,0 +1,43 @@
+.export-excel-button {
+  font-weight: 700;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #307750;
+  color: #fff;
+  border-style: none;
+  padding: 0 1rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.356);
+  transition: all 250ms;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transform: scale(1);
+}
+
+.export-excel-button:active {
+  transform: scale(0.95);
+}
+
+.export-excel-button svg {
+  margin-right: 0.5rem;
+}
+
+.export-excel-button::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 0;
+  border-radius: 0.3rem;
+  background-color: #469b61;
+  z-index: -1;
+  transition: all 350ms;
+}
+
+.export-excel-button:hover::before {
+  width: 100%;
+}
