@@ -63,6 +63,7 @@ export default function SignInPage() {
     <AuthLayout>
       <div className="grid w-full flex-grow items-center px-4 sm:justify-center">
         <SignIn.Root>
+          {/* Paso de inicio de sesión */}
           <SignIn.Step name="start" className="w-full space-y-8 sm:w-96">
             <header className="text-center">
               <h1 className="font-display mb-4 text-5xl font-bold tracking-tight text-indigo-600">
@@ -75,9 +76,7 @@ export default function SignInPage() {
                   fill
                   priority
                   sizes="(max-width: 96px) 100vw, 96px"
-                  style={{
-                    objectFit: 'contain',
-                  }}
+                  style={{ objectFit: 'contain' }}
                   quality={100}
                 />
               </div>
@@ -210,6 +209,157 @@ export default function SignInPage() {
                 </Clerk.Loading>
               </SignIn.Action>
             </div>
+          </SignIn.Step>
+
+          {/* Paso de verificación y recuperación de contraseña */}
+          <SignIn.Step
+            name="verifications"
+            className="w-full space-y-8 sm:w-96"
+          >
+            {/* Estrategia: código por correo */}
+            <SignIn.Strategy name="email_code">
+              <header className="text-center">
+                <h2 className="mt-4 text-xl font-medium tracking-tight text-neutral-950">
+                  Verificar código de correo
+                </h2>
+                <p className="mb-2 text-sm text-neutral-600">
+                  Te enviamos un código a <SignIn.SafeIdentifier />.
+                </p>
+              </header>
+              <Clerk.GlobalError className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-500" />
+              <Clerk.Field name="code">
+                <Clerk.Label>Código de correo</Clerk.Label>
+                <Clerk.Input
+                  type="otp"
+                  required
+                  className="w-full border-b-2 border-black bg-transparent px-0 py-2 font-bold text-white placeholder:text-black/30 focus:border-indigo-500 focus:ring-0 focus:outline-none"
+                />
+                <Clerk.FieldError className="text-red-500" />
+              </Clerk.Field>
+              <SignIn.Action
+                submit
+                className="relative flex h-10 w-full items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Verificar
+              </SignIn.Action>
+            </SignIn.Strategy>
+
+            {/* Estrategia: contraseña */}
+            <SignIn.Strategy name="password">
+              <header className="text-center">
+                <h2 className="mt-4 text-xl font-medium tracking-tight text-neutral-950">
+                  Ingresa tu contraseña
+                </h2>
+              </header>
+              <Clerk.Field name="password">
+                <Clerk.Label>Contraseña</Clerk.Label>
+                <Clerk.Input
+                  type="password"
+                  required
+                  className="w-full border-b-2 border-black bg-transparent px-0 py-2 font-bold text-white placeholder:text-black/30 focus:border-indigo-500 focus:ring-0 focus:outline-none"
+                />
+                <Clerk.FieldError className="text-red-500" />
+              </Clerk.Field>
+              <SignIn.Action
+                submit
+                className="relative flex h-10 w-full items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Ingresar
+              </SignIn.Action>
+              <SignIn.Action
+                navigate="forgot-password"
+                className="mt-2 text-xs text-indigo-500 underline"
+              >
+                ¿Olvidaste tu contraseña?
+              </SignIn.Action>
+            </SignIn.Strategy>
+
+            {/* Estrategia: código para resetear contraseña */}
+            <SignIn.Strategy name="reset_password_email_code">
+              <header className="text-center">
+                <h2 className="mt-4 text-xl font-medium tracking-tight text-neutral-950">
+                  Verifica tu correo
+                </h2>
+                <p className="mb-2 text-sm text-neutral-600">
+                  Te enviamos un código a <SignIn.SafeIdentifier /> para cambiar
+                  tu contraseña.
+                </p>
+              </header>
+              <Clerk.Field name="code">
+                <Clerk.Label>Código de correo</Clerk.Label>
+                <Clerk.Input
+                  type="otp"
+                  required
+                  className="w-full border-b-2 border-black bg-transparent px-0 py-2 font-bold text-white placeholder:text-black/30 focus:border-indigo-500 focus:ring-0 focus:outline-none"
+                />
+                <Clerk.FieldError className="text-red-500" />
+              </Clerk.Field>
+              <SignIn.Action
+                submit
+                className="relative flex h-10 w-full items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Verificar
+              </SignIn.Action>
+            </SignIn.Strategy>
+          </SignIn.Step>
+
+          {/* Paso para recuperar contraseña */}
+          <SignIn.Step
+            name="forgot-password"
+            className="w-full space-y-8 sm:w-96"
+          >
+            <header className="text-center">
+              <h2 className="mt-4 text-xl font-medium tracking-tight text-neutral-950">
+                ¿Olvidaste tu contraseña?
+              </h2>
+            </header>
+            <div className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+              <SignIn.SupportedStrategy name="reset_password_email_code">
+                Recuperar contraseña
+              </SignIn.SupportedStrategy>
+            </div>
+            <SignIn.Action
+              navigate="previous"
+              className="mt-2 text-xs text-indigo-500 underline"
+            >
+              Volver
+            </SignIn.Action>
+          </SignIn.Step>
+
+          {/* Paso para cambiar contraseña */}
+          <SignIn.Step
+            name="reset-password"
+            className="w-full space-y-8 sm:w-96"
+          >
+            <header className="text-center">
+              <h2 className="mt-4 text-xl font-medium tracking-tight text-neutral-950">
+                Cambia tu contraseña
+              </h2>
+            </header>
+            <Clerk.Field name="password">
+              <Clerk.Label>Nueva contraseña</Clerk.Label>
+              <Clerk.Input
+                type="password"
+                required
+                className="w-full border-b-2 border-black bg-transparent px-0 py-2 font-bold text-white placeholder:text-black/30 focus:border-indigo-500 focus:ring-0 focus:outline-none"
+              />
+              <Clerk.FieldError className="text-red-500" />
+            </Clerk.Field>
+            <Clerk.Field name="confirmPassword">
+              <Clerk.Label>Confirmar contraseña</Clerk.Label>
+              <Clerk.Input
+                type="password"
+                required
+                className="w-full border-b-2 border-black bg-transparent px-0 py-2 font-bold text-white placeholder:text-black/30 focus:border-indigo-500 focus:ring-0 focus:outline-none"
+              />
+              <Clerk.FieldError className="text-red-500" />
+            </Clerk.Field>
+            <SignIn.Action
+              submit
+              className="relative flex h-10 w-full items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Cambiar contraseña
+            </SignIn.Action>
           </SignIn.Step>
         </SignIn.Root>
       </div>
