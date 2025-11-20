@@ -76,9 +76,21 @@ export default function SignInPage() {
     } catch (err: unknown) {
       console.error('Error al iniciar sesión:', err);
       const e = err as { errors?: { message?: string }[]; message?: string };
-      setError(
-        e?.errors?.[0]?.message ?? e?.message ?? 'Credenciales incorrectas.'
-      );
+      let errorMessage =
+        e?.errors?.[0]?.message ?? e?.message ?? 'Error desconocido.';
+
+      // Traducir mensajes comunes de Clerk
+      if (errorMessage.includes("Couldn't find your account")) {
+        errorMessage = 'No se encontró tu cuenta.';
+      } else if (errorMessage.includes('Password is incorrect')) {
+        errorMessage = 'La contraseña es incorrecta.';
+      } else if (errorMessage.includes('Try again, or use another method')) {
+        errorMessage = 'Inténtalo de nuevo o usa otro método.';
+      } else if (errorMessage.includes('Identifier is invalid')) {
+        errorMessage = 'El identificador es inválido.';
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -109,9 +121,23 @@ export default function SignInPage() {
     } catch (err: unknown) {
       console.error('Error al verificar código:', err);
       const e = err as { errors?: { message?: string }[]; message?: string };
-      setError(
-        e?.errors?.[0]?.message ?? e?.message ?? 'Error al verificar código.'
-      );
+      let errorMessage =
+        e?.errors?.[0]?.message ?? e?.message ?? 'Error al verificar código.';
+
+      // Traducir mensajes comunes de Clerk
+      if (errorMessage.includes("Couldn't find your account")) {
+        errorMessage = 'No se encontró tu cuenta.';
+      } else if (errorMessage.includes('Password is incorrect')) {
+        errorMessage = 'La contraseña es incorrecta.';
+      } else if (errorMessage.includes('Try again, or use another method')) {
+        errorMessage = 'Inténtalo de nuevo o usa otro método.';
+      } else if (errorMessage.includes('Code is incorrect')) {
+        errorMessage = 'El código es incorrecto.';
+      } else if (errorMessage.includes('Identifier is invalid')) {
+        errorMessage = 'El identificador es inválido.';
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
